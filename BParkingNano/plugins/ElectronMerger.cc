@@ -88,8 +88,8 @@ private:
 void ElectronMerger::produce(edm::StreamID, edm::Event &evt, edm::EventSetup const & iSetup) const {
 
   //input
-  edm::Handle<pat::MuonCollection> trgMuon;
-  evt.getByToken(triggerMuons_, trgMuon);
+  // edm::Handle<pat::MuonCollection> trgMuon;
+  // evt.getByToken(triggerMuons_, trgMuon);
   edm::Handle<pat::ElectronCollection> lowpt;
   evt.getByToken(lowpt_src_, lowpt);
   edm::Handle<pat::ElectronCollection> pf;
@@ -136,15 +136,15 @@ void ElectronMerger::produce(edm::StreamID, edm::Event &evt, edm::EventSetup con
    ele.setP4(p4);     
 
    // skip electrons inside tag's jet or from different PV
-   bool skipEle=true;
-   for(const auto & trg : *trgMuon) {
-     if(reco::deltaR(ele, trg) < drTrg_cleaning_ && drTrg_cleaning_ > 0)
-        continue;
-     if(fabs(ele.vz() - trg.vz()) > dzTrg_cleaning_ && dzTrg_cleaning_ > 0)
-        continue;
-     skipEle=false;
-     break; // one trg muon to pass is enough :)
-   }
+   bool skipEle=false;
+   // for(const auto & trg : *trgMuon) {
+   //   if(reco::deltaR(ele, trg) < drTrg_cleaning_ && drTrg_cleaning_ > 0)
+   //      continue;
+   //   if(fabs(ele.vz() - trg.vz()) > dzTrg_cleaning_ && dzTrg_cleaning_ > 0)
+   //      continue;
+   //   skipEle=false;
+   //   break; // one trg muon to pass is enough :)
+   // }
    // we skip evts without trg muon
    if (skipEle) continue;
 
@@ -203,15 +203,15 @@ void ElectronMerger::produce(edm::StreamID, edm::Event &evt, edm::EventSetup con
    float ptbiased_seedBDT = float((*ptBiased)[gsfTrk]);
    if ( unbiased_seedBDT <bdtMin_) continue; //extra cut for low pT e on BDT
 
-   bool skipEle=true;
-   for(const auto & trg : *trgMuon) {
-     if(reco::deltaR(ele, trg) < drTrg_cleaning_ && drTrg_cleaning_ > 0)
-        continue;
-     if(fabs(ele.vz() - trg.vz()) > dzTrg_cleaning_ && dzTrg_cleaning_ > 0)
-        continue;
-     skipEle=false;
-     break;  // one trg muon is enough 
-   }
+   bool skipEle=false;
+   // for(const auto & trg : *trgMuon) {
+   //   if(reco::deltaR(ele, trg) < drTrg_cleaning_ && drTrg_cleaning_ > 0)
+   //      continue;
+   //   if(fabs(ele.vz() - trg.vz()) > dzTrg_cleaning_ && dzTrg_cleaning_ > 0)
+   //      continue;
+   //   skipEle=false;
+   //   break;  // one trg muon is enough 
+   // }
    // same here Do we need evts without trg muon? now we skip them
    if (skipEle) continue;   
    
